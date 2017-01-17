@@ -1,0 +1,11 @@
+{
+    "title": "Pokémon Onyx",
+    "width": 960,
+    "height": 640,
+    "fps": 30,
+    "textures":
+    [
+        "resources/textures/terrains.png",
+        "resources/textures/pokemons.png"
+    ]
+}
