@@ -1,7 +1,7 @@
 /**
  * Game - Represents the game manager.
  *
- * @returns {Game} the built game manager.
+ * @param  {String} body    the body tag.
  */
 function Game(body)
 {
@@ -13,32 +13,136 @@ function Game(body)
 
         this.load(function(content)
         {
-            var title = content.title;
-            var width = parseInt(content.width);
-            var height = parseInt(content.height);
-            var textures = content.textures;
+            this.setTitle(content.title);
+            this.setSize(parseInt(content.width), parseInt(content.height));
+            this.setTextures(content.textures);
+            this.setTerrains(content.terrains);
+            this.setWorld(content.world);
 
-            this.setTitle(title);
-            this.setSize(width, height);
-
-            this.textures = [];
-            for(var path of textures)
-            {
-                this.textures[path.substr(path.lastIndexOf("/") + 1)] = new Texture(path);
-            }
-
-            var t = this.textures["terrains.png"];
             var context = this.canvas.getContext("2d");
             if(context)
             {
+                var game = this;
+                console.log(game);
                 setInterval(function()
                 {
-                    context.fillRect(0, 0, width, height);
-                    context.drawImage(t.image, 0, 0, 32, 32, 0, 0, 32, 32);
+                    game.onThreadUpdate();
+                }, 0);
+                setInterval(function()
+                {
+                    game.onThreadRender(context);
                 }, 1000 / content.fps);
             }
         });
     }
+}
+
+/**
+ * Game.prototype.setTitle - Sets the game title.
+ *
+ * @param  {String} title the new title.
+ */
+Game.prototype.setTitle = function(title)
+{
+    if(title)
+    {
+        var title = document.getElementsByTagName("title")[0];
+        if(title && title.length > 0)
+        {
+            title.textContent = title;
+        }
+    }
+}
+
+/**
+ * Game.prototype.setSize - Sets the game canvas size.
+ *
+ * @param  {Integer} width  the new width.
+ * @param  {Integer} height the new height.
+ */
+Game.prototype.setSize = function(width, height)
+{
+    if(width && height)
+    {
+        this.canvas.width = width;
+        this.canvas.height = height;
+    }
+}
+
+/**
+ * Game.prototype.setTextures - Sets the game textures to load.
+ *
+ * @param  {Array} textures  the array of textures paths.
+ */
+Game.prototype.setTextures = function(textures)
+{
+    if(textures)
+    {
+        this.textures = [];
+        for(var path of textures)
+        {
+            this.textures[path] = new Texture("resources/textures/" + path);
+        }
+    }
+}
+
+/**
+ * Game.prototype.setTerrains - Sets the game terrains to load.
+ *
+ * @param  {Array} terrains  the array of terrains.
+ */
+Game.prototype.setTerrains = function(terrains)
+{
+    if(terrains)
+    {
+        this.terrains = [null];
+        for(var terrain of terrains)
+        {
+            this.terrains.push(new TileTerrain(terrain.primary, terrain.secondary, this.textures[terrain.texture], terrain.row, terrain.column, terrain.width, terrain.height));
+        }
+    }
+}
+
+/**
+ * Game.prototype.setWorld - Sets the game world to load.
+ *
+ * @param  {Array} world  the world array.
+ */
+Game.prototype.setWorld = function(world)
+{
+    if(world)
+    {
+        this.world = world;
+    }
+}
+
+Game.prototype.getTerrain = function(name)
+{
+    var terrain;
+
+    for(var i = 1; i < this.terrains.length; i++)
+    {
+        if(this.terrains[i].primary == name)
+        {
+            terrain = i;
+        }
+    }
+
+    return terrain;
+}
+
+Game.prototype.getWorld = function(layer, row, column)
+{
+    var data = 0;
+
+    if(this.world && layer >= 0 && layer < this.world.length
+    && this.world[layer] && row >= 0 && row < this.world[layer].length
+    && this.world[layer][row] && column >= 0 && column < this.world[layer][row].length)
+    {
+        data = this.world[layer][row][column];
+    }
+
+    return data;
 }
 
 /**
@@ -67,33 +171,40 @@ Game.prototype.load = function(callback)
 }
 
 /**
- * Game.prototype.setTitle - Sets the game title.
- *
- * @param  {String} title the new title.
+ * Game.prototype.onThreadUpdate - Called every thread cycle.  Computing, IA, collisions, and scripting stuff goes here.
  */
-Game.prototype.setTitle = function(title)
+Game.prototype.onThreadUpdate = function()
 {
-    if(title)
-    {
-        var title = document.getElementsByTagName("title")[0];
-        if(title && title.length > 0)
-        {
-            title.textContent = title;
-        }
-    }
+
 }
 
 /**
- * Game.prototype.setSize - Sets the game canvas size.
+ * Game.prototype.onThreadRender - Called every thread cycle (corresponding to the game FPS). Graphical stuff goes here.
  *
- * @param  {type} width  the new width.
- * @param  {type} height the new height.
+ * @param  {Context2D} context the canvas context.
  */
-Game.prototype.setSize = function(width, height)
+Game.prototype.onThreadRender = function(context)
 {
-    if(width && height)
+    var textureTerrain = this.textures["terrains.png"];
+    context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+    for(var layer = 0; layer < this.world.length; layer++)
     {
-        this.canvas.width = width;
-        this.canvas.height = height;
+        for(var row = 0; row < this.world[layer].length; row++)
+        {
+            for(var column = 0; column < this.world[layer][row].length; column++)
+            {
+                var data = this.world[layer][row][column];
+                if(this.terrains.length > data)
+                {
+                    var terrain = this.terrains[data];
+                    if(terrain && terrain.texture && terrain.texture.image)
+                    {
+                        var sprite = terrain.getVariant(this, layer, row, column, this.getTerrain(terrain.primary), this.getTerrain(terrain.secondary));
+                        context.drawImage(terrain.texture.image, sprite.x, sprite.y, sprite.width, sprite.height, sprite.width * column, sprite.height * row, sprite.width, sprite.height);
+                    }
+                }
+            }
+        }
     }
 }

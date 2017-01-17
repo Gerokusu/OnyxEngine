@@ -1,7 +1,12 @@
+/**
+ * Texture - description
+ *
+ * @param  {String} src    the source file.
+ * @param  {Integer} width  the width.
+ * @param  {Integer} height the height.
+ */
 function Texture(src, width, height)
 {
-    this.image = document.createElement("img");
+    this.image = new Image(width, height);
     this.image.src = src;
-    this.image.width = width;
-    this.image.height = height;
 }
