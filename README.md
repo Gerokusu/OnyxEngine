@@ -1,6 +1,6 @@
 #PokemonOnyx
 
-Description à venir.
+Un projet scolaire dont l'objectif est de développer un jeu-vidéo de type RPG, basé sur le monde de Pokémon. Une démonstration est disponible [ici](https://grox2006.github.io/PokemonOnyx/).
 
 ##I. Documentation
 
