@@ -17,6 +17,7 @@ function Game(body)
             this.setSize(parseInt(content.width), parseInt(content.height));
             this.setTextures(content.textures);
             this.setTerrains(content.terrains);
+            this.setCharacters(content.characters);
             this.setWorld(content.world);
 
             var context = this.canvas.getContext("2d");
@@ -31,6 +32,7 @@ function Game(body)
                 setInterval(function()
                 {
                     game.onThreadRender(context);
+                    context.fillStyle = "#000000";
                 }, 1000 / content.fps);
             }
         });
@@ -98,7 +100,24 @@ Game.prototype.setTerrains = function(terrains)
         this.terrains = [null];
         for(var terrain of terrains)
         {
-            this.terrains.push(new TileTerrain(terrain.primary, terrain.secondary, this.textures[terrain.texture], terrain.row, terrain.column, terrain.width, terrain.height));
+            this.terrains.push(new TileTerrain(terrain.primary, terrain.secondary, this.textures[terrain.texture], terrain.hasVariants, terrain.row, terrain.column, terrain.width, terrain.height));
+        }
+    }
+}
+
+/**
+ * Game.prototype.setCharacters - Sets the game characters to load.
+ *
+ * @param  {Array} characters  the array of characters.
+ */
+Game.prototype.setCharacters = function(characters)
+{
+    if(characters)
+    {
+        this.characters = [];
+        for(var character of characters)
+        {
+            this.characters.push(new TileCharacter(character.primary, this.textures[character.texture], character.row, character.column, character.width, character.height));
         }
     }
 }
@@ -106,13 +125,13 @@ Game.prototype.setTerrains = function(terrains)
 /**
  * Game.prototype.setWorld - Sets the game world to load.
  *
- * @param  {Array} world  the world array.
+ * @param  {Array} world  the world. ZA WARUDO !
  */
 Game.prototype.setWorld = function(world)
 {
     if(world)
     {
-        this.world = world;
+        this.world = new World(world.units, world.data, world.actors);
     }
 }
 
@@ -131,15 +150,30 @@ Game.prototype.getTerrain = function(name)
     return terrain;
 }
 
+Game.prototype.getCharacter = function(name)
+{
+    var character;
+
+    for(var i = 0; i < this.characters.length; i++)
+    {
+        if(this.characters[i].primary == name)
+        {
+            character = i;
+        }
+    }
+
+    return character;
+}
+
 Game.prototype.getWorld = function(layer, row, column)
 {
     var data = 0;
 
-    if(this.world && layer >= 0 && layer < this.world.length
-    && this.world[layer] && row >= 0 && row < this.world[layer].length
-    && this.world[layer][row] && column >= 0 && column < this.world[layer][row].length)
+    if(this.world.data && layer >= 0 && layer < this.world.data.length
+    && this.world.data[layer] && row >= 0 && row < this.world.data[layer].length
+    && this.world.data[layer][row] && column >= 0 && column < this.world.data[layer][row].length)
     {
-        data = this.world[layer][row][column];
+        data = this.world.data[layer][row][column];
     }
 
     return data;
@@ -185,25 +219,41 @@ Game.prototype.onThreadUpdate = function()
  */
 Game.prototype.onThreadRender = function(context)
 {
-    var textureTerrain = this.textures["terrains.png"];
     context.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-    for(var layer = 0; layer < this.world.length; layer++)
+    /** Draws terrain **/
+    for(var layer = 0; layer < this.world.data.length; layer++)
     {
-        for(var row = 0; row < this.world[layer].length; row++)
+        for(var row = 0; row < this.world.data[layer].length; row++)
         {
-            for(var column = 0; column < this.world[layer][row].length; column++)
+            for(var column = 0; column < this.world.data[layer][row].length; column++)
             {
-                var data = this.world[layer][row][column];
+                var data = this.world.data[layer][row][column];
                 if(this.terrains.length > data)
                 {
                     var terrain = this.terrains[data];
                     if(terrain && terrain.texture && terrain.texture.image)
                     {
-                        var sprite = terrain.getVariant(this, layer, row, column, this.getTerrain(terrain.primary), this.getTerrain(terrain.secondary));
-                        context.drawImage(terrain.texture.image, sprite.x, sprite.y, sprite.width, sprite.height, sprite.width * column, sprite.height * row, sprite.width, sprite.height);
+                        var sprite = terrain.getVariant(this, layer, row, column, this.getTerrain(terrain.secondary));
+                        context.drawImage(terrain.texture.image, sprite.x, sprite.y, sprite.width, sprite.height, this.world.units.width * column, this.world.units.height * row, sprite.width, sprite.height);
                     }
                 }
+            }
+        }
+    }
+
+    /** Draws actors **/
+    for(var actor of this.world.actors)
+    {
+        var data = this.getCharacter(actor.character);
+        if(this.characters.length > data)
+        {
+            var character = this.characters[data];
+            if(character || character === 0)
+            {
+                var sprite = character.getAnimation();
+
+                context.drawImage(character.texture.image, sprite.x, sprite.y, sprite.width, sprite.height, this.world.units.width * actor.x - 16, this.world.units.height * actor.y - 16, sprite.width, sprite.height);
             }
         }
     }

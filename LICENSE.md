@@ -10,13 +10,17 @@ La solution PokemonOnyx est sous license MIT.
 
 > THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-L'application est réalisée avec le support des bibliothèques suivantes :
+La solution a été réalisée sans bibliothèques ou plugins.
 
-- [Node.JS](https://github.com/nodejs/node/blob/master/LICENSE) [MIT License + EULA]
-- [AppJS](https://github.com/appjs/appjs/blob/master/LICENSE) [MIT License]
+La solution a été réalisée avec les outils suivants :
 
-L'application est réalisée avec le support des ressources suivantes :
+- [Atom](https://atom.io/)
+- [Paint.NET](http://www.getpaint.net/index.html)
 
-- [Pokémon HG/SS Overworld](https://www.spriters-resource.com/resources/sheets/31/34110.png) [Crédit à Barubary sur spriters-resource.com]
+La solution a été réalisée avec le support des ressources suivantes :
+
+- [Pokémon HG/SS Tileset Overworld](https://www.vg-resource.com/attachment.php?aid=3517) [Crédit à The Game sur vg-resource.com]
+- [Pokémon HG/SS Trainers Overworld](https://www.spriters-resource.com/resources/sheets/25/26955.png) [Crédit à ChrisX698 sur spriters-resource.com]
+- [Pokémon HG/SS Pokémon Overworld](https://www.spriters-resource.com/resources/sheets/31/34110.png) [Crédit à Barubary sur spriters-resource.com]
 
 L'application a été conçue et réalisée par Thibaud Laurent.
