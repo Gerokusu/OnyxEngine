@@ -1,5 +1,5 @@
 /**
- * Texture - description
+ * Texture - Represents a loaded image ready to be displayed.
  *
  * @param  {String} src    the source file.
  * @param  {Integer} width  the width.

@@ -16,6 +16,7 @@ function Game(body)
             this.setTitle(content.title);
             this.setSize(parseInt(content.width), parseInt(content.height));
             this.setTextures(content.textures);
+            this.setBehaviours(content.behaviours);
             this.setTerrains(content.terrains);
             this.setCharacters(content.characters);
             this.setWorld(content.world);
@@ -28,7 +29,7 @@ function Game(body)
                 setInterval(function()
                 {
                     game.onThreadUpdate();
-                }, 0);
+                }, 2000);
                 setInterval(function()
                 {
                     game.onThreadRender(context);
@@ -88,6 +89,20 @@ Game.prototype.setTextures = function(textures)
     }
 }
 
+Game.prototype.setBehaviours = function(behaviours)
+{
+    if(behaviours)
+    {
+        this.behaviours = [];
+        for(var behaviour of behaviours)
+        {
+            var script = document.createElement("script");
+            script.src = "resources/scripts/" + behaviour;
+            document.head.appendChild(script);
+        }
+    }
+}
+
 /**
  * Game.prototype.setTerrains - Sets the game terrains to load.
  *
@@ -123,7 +138,7 @@ Game.prototype.setCharacters = function(characters)
 }
 
 /**
- * Game.prototype.setWorld - Sets the game world to load.
+ * Game.prototype.setWorld - Sets the game world to load. Also loads contained scripts.
  *
  * @param  {Array} world  the world. ZA WARUDO !
  */
@@ -205,11 +220,21 @@ Game.prototype.load = function(callback)
 }
 
 /**
- * Game.prototype.onThreadUpdate - Called every thread cycle.  Computing, IA, collisions, and scripting stuff goes here.
+ * Game.prototype.onThreadUpdate - Called every thread cycle. Behaviours and scripting stuff goes here.
  */
 Game.prototype.onThreadUpdate = function()
 {
-
+    for(var actor of this.world.actors)
+    {
+        for(var behaviour of actor.behaviours)
+        {
+            var script = Behaviour.defined[behaviour];
+            if(script)
+            {
+                script(actor);
+            }
+        }
+    }
 }
 
 /**
@@ -252,7 +277,6 @@ Game.prototype.onThreadRender = function(context)
             if(character || character === 0)
             {
                 var sprite = character.getAnimation();
-
                 context.drawImage(character.texture.image, sprite.x, sprite.y, sprite.width, sprite.height, this.world.units.width * actor.x - 16, this.world.units.height * actor.y - 16, sprite.width, sprite.height);
             }
         }

@@ -11,6 +11,10 @@
         "houses.png",
         "pokemons.png"
     ],
+    "behaviours":
+    [
+        "player_move.js"
+    ],
     "terrains":
     [
         {
@@ -78,7 +82,11 @@
                 "character": "red",
                 "name": "Red",
                 "x": 7,
-                "y": 8
+                "y": 8,
+                "behaviours":
+                [
+                    "player_move"
+                ]
             }
         ],
         "data":
