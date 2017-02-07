@@ -24,12 +24,14 @@ function Game(body)
             var context = this.canvas.getContext("2d");
             if(context)
             {
+                this.input = new Input(this.canvas);
+
                 var game = this;
                 console.log(game);
                 setInterval(function()
                 {
                     game.onThreadUpdate();
-                }, 2000);
+                }, 500);
                 setInterval(function()
                 {
                     game.onThreadRender(context);
