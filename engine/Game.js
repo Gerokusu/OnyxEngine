@@ -28,10 +28,15 @@ function Game(body)
 
                 var game = this;
                 console.log(game);
+
+                var timeStart = performance.now();
                 setInterval(function()
                 {
-                    game.onThreadUpdate();
-                }, 500);
+                    var timeEnd = performance.now();
+                    game.onThreadUpdate((timeEnd - timeStart) / 1000);
+                    timeStart = timeEnd;
+
+                }, 0);
                 setInterval(function()
                 {
                     game.onThreadRender(context);
@@ -224,7 +229,7 @@ Game.prototype.load = function(callback)
 /**
  * Game.prototype.onThreadUpdate - Called every thread cycle. Behaviours and scripting stuff goes here.
  */
-Game.prototype.onThreadUpdate = function()
+Game.prototype.onThreadUpdate = function(delay)
 {
     for(var actor of this.world.actors)
     {
@@ -233,7 +238,7 @@ Game.prototype.onThreadUpdate = function()
             var script = Behaviour.defined[behaviour];
             if(script)
             {
-                script(actor);
+                script(actor, delay);
             }
         }
     }

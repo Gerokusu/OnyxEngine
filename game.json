@@ -2,7 +2,7 @@
     "title": "Pokémon Onyx",
     "width": 960,
     "height": 640,
-    "fps": 1,
+    "fps": 60,
     "textures":
     [
         "terrains.png",
