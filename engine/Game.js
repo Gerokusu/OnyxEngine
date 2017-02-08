@@ -1,56 +1,52 @@
 /**
- * Game - Represents the game manager.
- *
- * @param  {String} body    the body tag.
+ * Game - Represents a game.
  */
-function Game(body)
+function Game()
 {
-    var body = document.getElementsByTagName("body")[0];
-    if(body)
+    this.canvas = document.createElement("canvas");
+    document.body.appendChild(this.canvas);
+
+    this.load(function(content)
     {
-        this.canvas = document.createElement("canvas");
-        body.appendChild(this.canvas);
+        this.setTitle(content.title);
+        this.setSize(parseInt(content.width), parseInt(content.height));
+        this.setTextures(content.textures);
+        this.setAnimations(content.animations);
+        this.setBehaviours(content.behaviours);
+        this.setTerrains(content.terrains);
+        this.setCharacters(content.characters);
+        this.setWorld(content.world);
 
-        this.load(function(content)
+        this.input = new Input();
+        this.behaviour = new Behaviour();
+
+        var context = this.canvas.getContext("2d");
+        if(context)
         {
-            this.setTitle(content.title);
-            this.setSize(parseInt(content.width), parseInt(content.height));
-            this.setTextures(content.textures);
-            this.setBehaviours(content.behaviours);
-            this.setTerrains(content.terrains);
-            this.setCharacters(content.characters);
-            this.setWorld(content.world);
+            var game = this;
+            console.log(game);
 
-            var context = this.canvas.getContext("2d");
-            if(context)
+            var timeStart = performance.now();
+            setInterval(function()
             {
-                this.input = new Input(this.canvas);
+                var timeEnd = performance.now();
+                game.onThreadUpdate((timeEnd - timeStart) / 1000);
+                timeStart = timeEnd;
 
-                var game = this;
-                console.log(game);
-
-                var timeStart = performance.now();
-                setInterval(function()
-                {
-                    var timeEnd = performance.now();
-                    game.onThreadUpdate((timeEnd - timeStart) / 1000);
-                    timeStart = timeEnd;
-
-                }, 0);
-                setInterval(function()
-                {
-                    game.onThreadRender(context);
-                    context.fillStyle = "#000000";
-                }, 1000 / content.fps);
-            }
-        });
-    }
+            }, 0);
+            setInterval(function()
+            {
+                game.onThreadRender(context);
+                context.fillStyle = "#000000";
+            }, 1000 / content.fps);
+        }
+    });
 }
 
 /**
  * Game.prototype.setTitle - Sets the game title.
  *
- * @param  {String} title the new title.
+ * @param {String} title the new title.
  */
 Game.prototype.setTitle = function(title)
 {
@@ -67,8 +63,8 @@ Game.prototype.setTitle = function(title)
 /**
  * Game.prototype.setSize - Sets the game canvas size.
  *
- * @param  {Integer} width  the new width.
- * @param  {Integer} height the new height.
+ * @param {Integer} width the new width.
+ * @param {Integer} height the new height.
  */
 Game.prototype.setSize = function(width, height)
 {
@@ -96,11 +92,32 @@ Game.prototype.setTextures = function(textures)
     }
 }
 
+/**
+ * Game.prototype.setAnimations - Sets the game animations to load.
+ *
+ * @param {Array} animations the array of animations.
+ */
+Game.prototype.setAnimations = function(animations)
+{
+    if(animations)
+    {
+        this.animations = [];
+        for(var animation of animations)
+        {
+            this.animations[animation.id] = new Animation(animation.test);
+        }
+    }
+}
+
+/**
+ * Game.prototype.setBehaviours - Sets the game behaviours to load.
+ *
+ * @param {Array} behaviours the array of behaviours.
+ */
 Game.prototype.setBehaviours = function(behaviours)
 {
     if(behaviours)
     {
-        this.behaviours = [];
         for(var behaviour of behaviours)
         {
             var script = document.createElement("script");
@@ -113,7 +130,7 @@ Game.prototype.setBehaviours = function(behaviours)
 /**
  * Game.prototype.setTerrains - Sets the game terrains to load.
  *
- * @param  {Array} terrains  the array of terrains.
+ * @param {Array} terrains the array of terrains.
  */
 Game.prototype.setTerrains = function(terrains)
 {
@@ -122,7 +139,7 @@ Game.prototype.setTerrains = function(terrains)
         this.terrains = [null];
         for(var terrain of terrains)
         {
-            this.terrains.push(new TileTerrain(terrain.primary, terrain.secondary, this.textures[terrain.texture], terrain.hasVariants, terrain.row, terrain.column, terrain.width, terrain.height));
+            this.terrains[terrain.id] = new TileTerrain(terrain.name, this.textures[terrain.texture], terrain.row, terrain.column, terrain.width, terrain.height, terrain.hasVariants, terrain.foreign);
         }
     }
 }
@@ -139,7 +156,7 @@ Game.prototype.setCharacters = function(characters)
         this.characters = [];
         for(var character of characters)
         {
-            this.characters.push(new TileCharacter(character.primary, this.textures[character.texture], character.row, character.column, character.width, character.height));
+            this.characters[character.id] = new TileCharacter(character.name, this.textures[character.texture], character.row, character.column, character.width, character.height, character.animations);
         }
     }
 }
@@ -153,11 +170,11 @@ Game.prototype.setWorld = function(world)
 {
     if(world)
     {
-        this.world = new World(world.units, world.data, world.actors);
+        this.world = new World(world.units, world.actors, world.data);
     }
 }
 
-Game.prototype.getTerrain = function(name)
+Game.prototype.getTerrainOLD = function(id)
 {
     var terrain;
 
@@ -172,7 +189,7 @@ Game.prototype.getTerrain = function(name)
     return terrain;
 }
 
-Game.prototype.getCharacter = function(name)
+Game.prototype.getCharacterOLD = function(name)
 {
     var character;
 
@@ -228,17 +245,24 @@ Game.prototype.load = function(callback)
 
 /**
  * Game.prototype.onThreadUpdate - Called every thread cycle. Behaviours and scripting stuff goes here.
+ *
+ * @param {Context2D} delay the delay since the last cycle.
  */
 Game.prototype.onThreadUpdate = function(delay)
 {
-    for(var actor of this.world.actors)
+    for(var key in this.world.actors)
     {
-        for(var behaviour of actor.behaviours)
+
+        var actor = this.world.actors[key];
+        if(actor)
         {
-            var script = Behaviour.defined[behaviour];
-            if(script)
+            for(var behaviour of actor.behaviours)
             {
-                script(actor, delay);
+                var script = Behaviour.get(behaviour);
+                if(script)
+                {
+                    script(actor, delay);
+                }
             }
         }
     }
@@ -247,7 +271,7 @@ Game.prototype.onThreadUpdate = function(delay)
 /**
  * Game.prototype.onThreadRender - Called every thread cycle (corresponding to the game FPS). Graphical stuff goes here.
  *
- * @param  {Context2D} context the canvas context.
+ * @param {Context2D} context the canvas context.
  */
 Game.prototype.onThreadRender = function(context)
 {
@@ -260,31 +284,27 @@ Game.prototype.onThreadRender = function(context)
         {
             for(var column = 0; column < this.world.data[layer][row].length; column++)
             {
-                var data = this.world.data[layer][row][column];
-                if(this.terrains.length > data)
+                var terrain = this.terrains[this.world.data[layer][row][column]];
+                if(terrain && terrain.texture && terrain.texture.image)
                 {
-                    var terrain = this.terrains[data];
-                    if(terrain && terrain.texture && terrain.texture.image)
-                    {
-                        var sprite = terrain.getVariant(this, layer, row, column, this.getTerrain(terrain.secondary));
-                        context.drawImage(terrain.texture.image, sprite.x, sprite.y, sprite.width, sprite.height, this.world.units.width * column, this.world.units.height * row, sprite.width, sprite.height);
-                    }
+                    var sprite = terrain.getVariant(this, layer, row, column);
+                    context.drawImage(terrain.texture.image, sprite.x, sprite.y, sprite.width, sprite.height, this.world.units.width * column, this.world.units.height * row, sprite.width, sprite.height);
                 }
             }
         }
     }
 
     /** Draws actors **/
-    for(var actor of this.world.actors)
+    for(var key in this.world.actors)
     {
-        var data = this.getCharacter(actor.character);
-        if(this.characters.length > data)
+        var actor = this.world.actors[key];
+        if(actor)
         {
-            var character = this.characters[data];
-            if(character || character === 0)
+            var character = this.characters[key];
+            if(character)
             {
                 var sprite = character.getAnimation();
-                context.drawImage(character.texture.image, sprite.x, sprite.y, sprite.width, sprite.height, this.world.units.width * actor.x - 16, this.world.units.height * actor.y - 16, sprite.width, sprite.height);
+                context.drawImage(character.texture.image, sprite.x, sprite.y, sprite.width, sprite.height, this.world.units.width * actor.position.x - 16, this.world.units.height * actor.position.y - 16, sprite.width, sprite.height);
             }
         }
     }

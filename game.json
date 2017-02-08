@@ -11,6 +11,13 @@
         "houses.png",
         "pokemons.png"
     ],
+    "animations":
+    [
+        {
+            "id": "player_walk",
+            "test": "test"
+        }
+    ],
     "behaviours":
     [
         "player_move.js"
@@ -18,40 +25,44 @@
     "terrains":
     [
         {
-            "texture": "terrains.png",
-            "primary": "grass",
-            "secondary": "dirt",
+            "id": 1,
+            "foreign": -1,
+            "name": "Grass",
             "hasVariants": true,
+            "texture": "terrains.png",
             "row": 0,
             "column": 5,
             "width": 32,
             "height": 32
         },
         {
-            "texture": "terrains.png",
-            "primary": "sand",
-            "secondary": "grass",
+            "id": 2,
+            "foreign": 1,
+            "name": "Sand",
             "hasVariants": true,
+            "texture": "terrains.png",
             "row": 0,
             "column": 0,
             "width": 32,
             "height": 32
         },
         {
-            "texture": "trees.png",
-            "primary": "tree",
-            "secondary": "grass",
+            "id": 3,
+            "foreign": 1,
+            "name": "Tree",
             "hasVariants": false,
+            "texture": "trees.png",
             "row": 0,
             "column": 0,
             "width": 96,
             "height": 96
         },
         {
-            "texture": "houses.png",
-            "primary": "house",
-            "secondary": "grass",
+            "id": 4,
+            "foreign": 1,
+            "name": "House",
             "hasVariants": false,
+            "texture": "houses.png",
             "row": 0,
             "column": 0,
             "width": 160,
@@ -61,12 +72,17 @@
     "characters":
     [
         {
+            "id": "red",
+            "name": "Red",
             "texture": "characters.png",
-            "primary": "red",
             "row": 20,
             "column": 0,
             "width": 64,
-            "height": 64
+            "height": 64,
+            "animations":
+            [
+                "character_walk"
+            ]
         }
     ],
     "world":
@@ -79,8 +95,8 @@
         "actors":
         [
             {
-                "character": "red",
-                "name": "Red",
+                "id": "red",
+                "name": "Red the player",
                 "x": 7,
                 "y": 8,
                 "behaviours":
