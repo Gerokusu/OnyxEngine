@@ -14,8 +14,132 @@
     "animations":
     [
         {
-            "id": "player_walk",
-            "test": "test"
+            "id": "character_idle_top",
+            "states":
+            [
+                {
+                    "drow": 0,
+                    "dcolumn": 0
+                }
+            ]
+        },
+        {
+            "id": "character_idle_right",
+            "states":
+            [
+                {
+                    "drow": 0,
+                    "dcolumn": 1
+                }
+            ]
+        },
+        {
+            "id": "character_idle_bottom",
+            "states":
+            [
+                {
+                    "drow": 0,
+                    "dcolumn": 2
+                }
+            ]
+        },
+        {
+            "id": "character_idle_left",
+            "states":
+            [
+                {
+                    "drow": 0,
+                    "dcolumn": 3
+                }
+            ]
+        },
+        {
+            "id": "character_walk_top",
+            "states":
+            [
+                {
+                    "drow": 1,
+                    "dcolumn": 0
+                },
+                {
+                    "drow": 0,
+                    "dcolumn": 0
+                },
+                {
+                    "drow": 2,
+                    "dcolumn": 0
+                },
+                {
+                    "drow": 0,
+                    "dcolumn": 0
+                }
+            ]
+        },
+        {
+            "id": "character_walk_right",
+            "states":
+            [
+                {
+                    "drow": 1,
+                    "dcolumn": 1
+                },
+                {
+                    "drow": 0,
+                    "dcolumn": 1
+                },
+                {
+                    "drow": 2,
+                    "dcolumn": 1
+                },
+                {
+                    "drow": 0,
+                    "dcolumn": 1
+                }
+            ]
+        },
+        {
+            "id": "character_walk_bottom",
+            "states":
+            [
+                {
+                    "drow": 1,
+                    "dcolumn": 2
+                },
+                {
+                    "drow": 0,
+                    "dcolumn": 2
+                },
+                {
+                    "drow": 2,
+                    "dcolumn": 2
+                },
+                {
+                    "drow": 0,
+                    "dcolumn": 2
+                }
+            ]
+        },
+        {
+            "id": "character_walk_left",
+            "states":
+            [
+                {
+                    "drow": 1,
+                    "dcolumn": 3
+                },
+                {
+                    "drow": 0,
+                    "dcolumn": 3
+                },
+                {
+                    "drow": 2,
+                    "dcolumn": 3
+                },
+                {
+                    "drow": 0,
+                    "dcolumn": 3
+                }
+            ]
         }
     ],
     "behaviours":
@@ -78,11 +202,7 @@
             "row": 20,
             "column": 0,
             "width": 64,
-            "height": 64,
-            "animations":
-            [
-                "character_walk"
-            ]
+            "height": 64
         }
     ],
     "world":
@@ -99,6 +219,12 @@
                 "name": "Red the player",
                 "x": 7,
                 "y": 8,
+                "orientation": "bottom",
+                "animator":
+                {
+                    "animation": "character_idle",
+                    "state": 0
+                },
                 "behaviours":
                 [
                     "player_move"

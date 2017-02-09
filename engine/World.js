@@ -14,7 +14,7 @@ function World(units, actors, data)
         this.actors = [];
         for(var actor of actors)
         {
-            this.actors[actor.id] = new Actor(actor.name, actor.x, actor.y, actor.behaviours);
+            this.actors[actor.id] = new Actor(actor.name, actor.x, actor.y, actor.orientation, actor.animator, actor.behaviours);
         }
     }
 

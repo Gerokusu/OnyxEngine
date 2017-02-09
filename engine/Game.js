@@ -104,7 +104,7 @@ Game.prototype.setAnimations = function(animations)
         this.animations = [];
         for(var animation of animations)
         {
-            this.animations[animation.id] = new Animation(animation.test);
+            this.animations[animation.id] = new Animation(animation.states);
         }
     }
 }
@@ -156,7 +156,7 @@ Game.prototype.setCharacters = function(characters)
         this.characters = [];
         for(var character of characters)
         {
-            this.characters[character.id] = new TileCharacter(character.name, this.textures[character.texture], character.row, character.column, character.width, character.height, character.animations);
+            this.characters[character.id] = new TileCharacter(character.name, this.textures[character.texture], character.row, character.column, character.width, character.height);
         }
     }
 }
@@ -172,36 +172,6 @@ Game.prototype.setWorld = function(world)
     {
         this.world = new World(world.units, world.actors, world.data);
     }
-}
-
-Game.prototype.getTerrainOLD = function(id)
-{
-    var terrain;
-
-    for(var i = 1; i < this.terrains.length; i++)
-    {
-        if(this.terrains[i].primary == name)
-        {
-            terrain = i;
-        }
-    }
-
-    return terrain;
-}
-
-Game.prototype.getCharacterOLD = function(name)
-{
-    var character;
-
-    for(var i = 0; i < this.characters.length; i++)
-    {
-        if(this.characters[i].primary == name)
-        {
-            character = i;
-        }
-    }
-
-    return character;
 }
 
 Game.prototype.getWorld = function(layer, row, column)
@@ -303,7 +273,7 @@ Game.prototype.onThreadRender = function(context)
             var character = this.characters[key];
             if(character)
             {
-                var sprite = character.getAnimation();
+                var sprite = character.getAnimation(this.animations[actor.animator.animation], actor.animator.state);
                 context.drawImage(character.texture.image, sprite.x, sprite.y, sprite.width, sprite.height, this.world.units.width * actor.position.x - 16, this.world.units.height * actor.position.y - 16, sprite.width, sprite.height);
             }
         }

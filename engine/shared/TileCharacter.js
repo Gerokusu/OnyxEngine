@@ -8,14 +8,12 @@
  * @param {type} width the texture width.
  * @param {type} height the texture height.
  */
-function TileCharacter(name, texture, row, column, width, height, animations)
+function TileCharacter(name, texture, row, column, width, height)
 {
     Tile.call(this, name, texture, row, column, width, height);
-
-    this.animations = animations;
 }
 
-TileCharacter.prototype.getAnimation = function()
+TileCharacter.prototype.getAnimation = function(animation, state)
 {
     var sprite =
     {
@@ -23,6 +21,17 @@ TileCharacter.prototype.getAnimation = function()
         y: this.sprite.y,
         width: this.sprite.width,
         height: this.sprite.height
+    }
+
+    if(animation)
+    {
+        var time = Math.floor(state) % (animation.loop + 1);
+        var currentState = animation.states[time];
+        if(currentState)
+        {
+            sprite.x += currentState.drow * sprite.width;
+            sprite.y += currentState.dcolumn * sprite.height;
+        }
     }
 
     return sprite;
