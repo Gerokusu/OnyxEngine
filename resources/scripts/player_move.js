@@ -1,99 +1,67 @@
 Behaviour.set("player_move", function(object, delay)
 {
-    var startPosition =
+    var translation =
     {
-        x: object.position.x,
-        y: object.position.y
-    };
-
-    move(Input.get(68) - Input.get(81), Input.get(83) - Input.get(90), 4);
-
-    function move(dx, dy, speed)
-    {
-        var startAnimation = object.animator.animation;
-
-        if(dy < 0)
-        {
-            object.animator.animation = "character_walk_top";
-            object.orientation = "top";
-        }
-        else if(dx > 0)
-        {
-            object.animator.animation = "character_walk_right";
-            object.orientation = "right";
-        }
-        else if(dy > 0)
-        {
-            object.animator.animation = "character_walk_bottom";
-            object.orientation = "bottom";
-        }
-        else if(dx < 0)
-        {
-            object.animator.animation = "character_walk_left";
-            object.orientation = "left";
-        }
-        else
-        {
-            switch (object.orientation)
-            {
-                case "top":
-                    object.animator.animation = "character_idle_top";
-                break;
-
-                case "right":
-                    object.animator.animation = "character_idle_right";
-                break;
-
-                case "bottom":
-                    object.animator.animation = "character_idle_bottom";
-                break;
-
-                case "left":
-                    object.animator.animation = "character_idle_left";
-                break;
-
-                default:
-                    object.animator.animation = "character_idle_bottom";
-                break;
-
-            }
-        }
-
-        if(startAnimation != object.animator.animation)
-        {
-            object.animator.state = 0;
-        }
-
-        object.animator.state += (delay * speed);
+        dx: Input.get(68) - Input.get(81),
+        dy: Input.get(83) - Input.get(90),
+        speed: 4
     }
 
-    /*
-    object.position.x += (Input.get(68) - Input.get(81)) * delay * 4;
-    object.position.y += (Input.get(83) - Input.get(90)) * delay * 4;
+    var startAnimation = object.animator.animation;
 
-    var dx = 0;
-    var dy = 0;
-    if(Math.floor(object.position.x) > Math.floor(positionStart.x))
+    if(translation.dy < 0)
     {
-        dx = 1;
-        object.animator.animation = "character_walk";
+        object.animator.animation = "character_walk_top";
+        object.orientation = "top";
     }
-    else if(Math.floor(object.position.x) < Math.floor(positionStart.x))
+    else if(translation.dx > 0)
     {
-        dx = -1;
-        object.animator.animation = "character_walk";
+        object.animator.animation = "character_walk_right";
+        object.orientation = "right";
     }
-    else if(Math.floor(object.position.y) > Math.floor(positionStart.y))
+    else if(translation.dy > 0)
     {
-        dy = 1;
-        object.animator.animation = "character_walk";
+        object.animator.animation = "character_walk_bottom";
+        object.orientation = "bottom";
     }
-    else if(Math.floor(object.position.y) < Math.floor(positionStart.y))
+    else if(translation.dx < 0)
     {
-        dy = -1;
-        object.animator.animation = "character_walk";
+        object.animator.animation = "character_walk_left";
+        object.orientation = "left";
     }
-    */
-    //TODO ANIMATIONS
-    // for
+    else
+    {
+        switch (object.orientation)
+        {
+            case "top":
+                object.animator.animation = "character_idle_top";
+            break;
+
+            case "right":
+                object.animator.animation = "character_idle_right";
+            break;
+
+            case "bottom":
+                object.animator.animation = "character_idle_bottom";
+            break;
+
+            case "left":
+                object.animator.animation = "character_idle_left";
+            break;
+
+            default:
+                object.animator.animation = "character_idle_bottom";
+            break;
+
+        }
+    }
+
+    if(startAnimation != object.animator.animation)
+    {
+        object.animator.state = 0;
+    }
+
+    object.position.x += (delay * translation.dx * translation.speed);
+    object.position.y += (delay * translation.dy * translation.speed);
+    object.animator.state += (delay * translation.speed);
 });
