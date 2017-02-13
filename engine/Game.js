@@ -274,7 +274,7 @@ Game.prototype.onThreadRender = function(context)
             if(character)
             {
                 var sprite = character.getAnimation(this.animations[actor.animator.animation], actor.animator.state);
-                context.drawImage(character.texture.image, sprite.x, sprite.y, sprite.width, sprite.height, this.world.units.width * actor.position.x - 16, this.world.units.height * actor.position.y - 16, sprite.width, sprite.height);
+                context.drawImage(character.texture.image, sprite.x, sprite.y, sprite.width, sprite.height, Math.floor(this.world.units.width * actor.position.x - 16), Math.floor(this.world.units.height * actor.position.y - 16), sprite.width, sprite.height);
             }
         }
     }

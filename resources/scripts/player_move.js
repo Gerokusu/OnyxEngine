@@ -67,13 +67,25 @@ Behaviour.set("player_move", function(object, delay)
     object.position.y += (delay * object.translation.dy * object.translation.speed);
     object.animator.state += (delay * object.translation.speed);
 
-    if(Math.floor(positionStart.x) != Math.floor(object.position.x))
+    if(Math.floor(positionStart.x) < Math.floor(object.position.x))
     {
+        object.position.x = Math.floor(object.position.x);
+        object.translation.dx = 0;
+    }
+    else if(Math.ceil(positionStart.x) > Math.ceil(object.position.x))
+    {
+        object.position.x = Math.ceil(object.position.x);
         object.translation.dx = 0;
     }
 
-    if(Math.floor(positionStart.y) != Math.floor(object.position.y))
+    if(Math.floor(positionStart.y) < Math.floor(object.position.y))
     {
+        object.position.y = Math.floor(object.position.y);
+        object.translation.dy = 0;
+    }
+    else if(Math.ceil(positionStart.y) > Math.ceil(object.position.y))
+    {
+        object.position.y = Math.ceil(object.position.y);
         object.translation.dy = 0;
     }
 });
