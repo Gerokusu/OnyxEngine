@@ -16,6 +16,12 @@ function Actor(name, x, y, orientation, animator, behaviours)
         x: x,
         y: y
     };
+    this.translation =
+    {
+        dx: 0,
+        dy: 0,
+        speed: 0
+    };
     this.orientation = orientation;
     this.animator =
     {
