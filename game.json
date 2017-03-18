@@ -2,7 +2,7 @@
     "title": "Pokémon Onyx",
     "width": 960,
     "height": 640,
-    "fps": 60,
+    "fps": 120,
     "textures":
     [
         "terrains.png",
@@ -196,7 +196,7 @@
     "characters":
     [
         {
-            "id": "red",
+            "id": 0,
             "name": "Red",
             "texture": "characters.png",
             "row": 20,
@@ -215,7 +215,7 @@
         "actors":
         [
             {
-                "id": "red",
+                "id": 0,
                 "name": "Red the player",
                 "x": 7,
                 "y": 8,
