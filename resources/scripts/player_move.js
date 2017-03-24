@@ -6,9 +6,14 @@ Behaviour.set("player_move", function(object, delay)
         y: object.position.y
     }
 
-    object.translation.dx = object.translation.dx != 0 ? object.translation.dx : Input.get(68) - Input.get(81);
-    object.translation.dy = object.translation.dy != 0 ? object.translation.dy : Input.get(83) - Input.get(90);
-    object.translation.speed = 4;
+    var up = Input.get(90);
+    var down = Input.get(83);
+    var right = Input.get(68);
+    var left = Input.get(81);
+
+    object.translation.dx = object.translation.dx != 0 || up || down ? object.translation.dx : right - left;
+    object.translation.dy = object.translation.dy != 0 || right || left ? object.translation.dy : down - up;
+    object.translation.speed = 6;
 
     var animationStart = object.animator.animation;
     if(object.translation.dy < 0)
