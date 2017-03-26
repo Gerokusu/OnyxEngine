@@ -8,11 +8,12 @@
  * @param {String} animator the animator.
  * @param {String} behaviours the behaviours id array.
  */
-function Actor(name, x, y, orientation, animator, behaviours)
+function Actor(name, layer, x, y, orientation, animator, behaviours)
 {
     this.name = name;
     this.position =
     {
+        layer: layer,
         x: x,
         y: y
     };

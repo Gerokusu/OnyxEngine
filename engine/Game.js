@@ -170,7 +170,7 @@ Game.prototype.setWorld = function(world)
 {
     if(world)
     {
-        this.world = new World(world.units, world.actors, world.data);
+        this.world = new World(world.units, world.actors, world.data, world.collision);
     }
 }
 
@@ -214,40 +214,12 @@ Game.prototype.load = function(callback)
 }
 
 /**
- * Game.prototype.onThreadUpdate - Called every thread cycle. Behaviours and scripting stuff goes here.
+ * Game.prototype.drawTerrain - Draws the terrain.
  *
- * @param {Context2D} delay the delay since the last cycle.
+ * @param  {type} context the canvas context.
  */
-Game.prototype.onThreadUpdate = function(delay)
+Game.prototype.drawTerrain = function(context)
 {
-    for(var key in this.world.actors)
-    {
-
-        var actor = this.world.actors[key];
-        if(actor)
-        {
-            for(var behaviour of actor.behaviours)
-            {
-                var script = Behaviour.get(behaviour);
-                if(script)
-                {
-                    script(actor, delay);
-                }
-            }
-        }
-    }
-}
-
-/**
- * Game.prototype.onThreadRender - Called every thread cycle (corresponding to the game FPS). Graphical stuff goes here.
- *
- * @param {Context2D} context the canvas context.
- */
-Game.prototype.onThreadRender = function(context)
-{
-    context.fillRect(0, 0, this.canvas.width, this.canvas.height);
-
-    /** Draws terrain **/
     for(var layer = 0; layer < this.world.data.length; layer++)
     {
         for(var row = 0; row < this.world.data[layer].length; row++)
@@ -263,7 +235,15 @@ Game.prototype.onThreadRender = function(context)
             }
         }
     }
+}
 
+/**
+ * Game.prototype.drawActors - Draws the actors.
+ *
+ * @param  {type} context the canvas context.
+ */
+Game.prototype.drawActors = function(context)
+{
     /** Draws actors **/
     for(var key in this.world.actors)
     {
@@ -278,4 +258,41 @@ Game.prototype.onThreadRender = function(context)
             }
         }
     }
+}
+
+/**
+ * Game.prototype.onThreadUpdate - Called every thread cycle. Behaviours and scripting stuff goes here.
+ *
+ * @param {Context2D} delay the delay since the last cycle.
+ */
+Game.prototype.onThreadUpdate = function(delay)
+{
+    for(var key in this.world.actors)
+    {
+        var actor = this.world.actors[key];
+        if(actor)
+        {
+            for(var behaviour of actor.behaviours)
+            {
+                var script = Behaviour.get(behaviour);
+                if(script)
+                {
+                    script(delay, actor, this);
+                }
+            }
+        }
+    }
+}
+
+/**
+ * Game.prototype.onThreadRender - Called every thread cycle (corresponding to the game FPS). Graphical stuff goes here.
+ *
+ * @param {Context2D} context the canvas context.
+ */
+Game.prototype.onThreadRender = function(context)
+{
+    context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+    this.drawTerrain(context);
+    this.drawActors(context);
 }
