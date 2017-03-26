@@ -218,7 +218,7 @@ Game.prototype.load = function(callback)
  *
  * @param  {type} context the canvas context.
  */
-Game.prototype.drawTerrain = function(context)
+Game.prototype.drawWorld = function(context)
 {
     for(var layer = 0; layer < this.world.data.length; layer++)
     {
@@ -234,21 +234,24 @@ Game.prototype.drawTerrain = function(context)
                 }
             }
         }
+
+        this.drawActors(context, layer);
     }
 }
 
 /**
- * Game.prototype.drawActors - Draws the actors.
+ * Game.prototype.drawActors - Draws the actors of the given layer.
  *
  * @param  {type} context the canvas context.
+ * @param  {type} layer the layer which actors need to be drawn.
  */
-Game.prototype.drawActors = function(context)
+Game.prototype.drawActors = function(context, layer)
 {
     /** Draws actors **/
     for(var key in this.world.actors)
     {
         var actor = this.world.actors[key];
-        if(actor)
+        if(actor && actor.position.layer == layer)
         {
             var character = this.characters[key];
             if(character)
@@ -293,6 +296,5 @@ Game.prototype.onThreadRender = function(context)
 {
     context.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-    this.drawTerrain(context);
-    this.drawActors(context);
+    this.drawWorld(context);
 }
