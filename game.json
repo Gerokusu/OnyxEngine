@@ -248,7 +248,7 @@
         "interactions":
         [
             {
-                "id": 0,
+                "id": 1,
                 "type": "text",
                 "value": "This is a door."
             }

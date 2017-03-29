@@ -15,25 +15,33 @@ Behaviour.set("player_interact", function(delay, object, game)
     switch(object.orientation)
     {
         case "top":
-        positionFront.y -= 1;
+            positionFront.y -= 1;
         break;
 
         case "right":
-        positionFront.x += 1;
+            positionFront.x += 1;
         break;
 
         case "bottom":
-        positionFront.y += 1;
+            positionFront.y += 1;
         break;
 
         case "left":
-        positionFront.x -= 1;
+            positionFront.x -= 1;
         break;
     }
 
     var e = Input.getOnce(69);
-    if(e && game.world.getLayerInteraction(positionStart.y + positionFront.y, positionStart.x + positionFront.x) == 1)
+    if(e)
     {
-        console.log("INTERACTION !");
+        var id = game.world.getLayerInteraction(positionStart.y + positionFront.y, positionStart.x + positionFront.x);
+        if(id)
+        {
+            var interaction = game.world.getInteraction(id);
+            if(interaction)
+            {
+                
+            }
+        }
     }
 });

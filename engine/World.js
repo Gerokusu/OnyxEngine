@@ -23,6 +23,20 @@ function World(units, actors, interactions, layers)
     this.layers = layers;
 }
 
+World.prototype.getInteraction = function(id)
+{
+    var res = undefined;
+    for(var interaction of this.interactions)
+    {
+        if(id == interaction.id)
+        {
+            res = interaction;
+        }
+    }
+
+    return res;
+}
+
 World.prototype.getLayerData = function(layer, row, column)
 {
     var res = 0;
