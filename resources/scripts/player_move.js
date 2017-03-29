@@ -70,30 +70,30 @@ Behaviour.set("player_move", function(delay, object, game)
         object.animator.state = 0;
     }
 
-    var l;
-    var c;
+    var row;
+    var column;
 
     if(object.translation.dx >= 0)
     {
-        c = Math.floor(object.position.x + object.translation.dx);
+        column = Math.floor(object.position.x + object.translation.dx);
     }
 
     if(object.translation.dx < 0)
     {
-        c = Math.ceil(object.position.x + object.translation.dx);
+        column = Math.ceil(object.position.x + object.translation.dx);
     }
 
     if(object.translation.dy >= 0)
     {
-        l = Math.floor(object.position.y + object.translation.dy);
+        row = Math.floor(object.position.y + object.translation.dy);
     }
 
     if(object.translation.dy < 0)
     {
-        l = Math.ceil(object.position.y + object.translation.dy);
+        row = Math.ceil(object.position.y + object.translation.dy);
     }
 
-    if(game.world.getCollisionLayer(l, c) == 0)
+    if(game.world.getLayerCollision(row, column) == 0)
     {
         //Calcul de la position de destination en fonction du temps et de la vitesse de déplacement
         object.position.x += (delay * object.translation.dx * object.translation.speed);

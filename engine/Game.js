@@ -170,22 +170,8 @@ Game.prototype.setWorld = function(world)
 {
     if(world)
     {
-        this.world = new World(world.units, world.actors, world.data, world.collision, world.interaction);
+        this.world = new World(world.units, world.actors, world.interactions, world.layers);
     }
-}
-
-Game.prototype.getWorld = function(layer, row, column)
-{
-    var data = 0;
-
-    if(this.world.data && layer >= 0 && layer < this.world.data.length
-    && this.world.data[layer] && row >= 0 && row < this.world.data[layer].length
-    && this.world.data[layer][row] && column >= 0 && column < this.world.data[layer][row].length)
-    {
-        data = this.world.data[layer][row][column];
-    }
-
-    return data;
 }
 
 /**
@@ -220,13 +206,13 @@ Game.prototype.load = function(callback)
  */
 Game.prototype.drawWorld = function(context)
 {
-    for(var layer = 0; layer < this.world.data.length; layer++)
+    for(var layer = 0; layer < this.world.layers.data.length; layer++)
     {
-        for(var row = 0; row < this.world.data[layer].length; row++)
+        for(var row = 0; row < this.world.layers.data[layer].length; row++)
         {
-            for(var column = 0; column < this.world.data[layer][row].length; column++)
+            for(var column = 0; column < this.world.layers.data[layer][row].length; column++)
             {
-                var terrain = this.terrains[this.world.data[layer][row][column]];
+                var terrain = this.terrains[this.world.layers.data[layer][row][column]];
                 if(terrain && terrain.texture && terrain.texture.image)
                 {
                     var sprite = terrain.getVariant(this, layer, row, column);

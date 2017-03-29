@@ -34,9 +34,9 @@ TileTerrain.prototype.getVariant = function(game, layer, row, column)
     {
         var surroundings =
         [
-            [game.getWorld(layer, row - 1, column - 1), game.getWorld(layer, row - 1, column), game.getWorld(layer, row - 1, column + 1)],
-            [game.getWorld(layer, row, column - 1), game.getWorld(layer, row, column), game.getWorld(layer, row, column + 1)],
-            [game.getWorld(layer, row + 1, column - 1), game.getWorld(layer, row + 1, column), game.getWorld(layer, row + 1, column + 1)]
+            [game.world.getLayerData(layer, row - 1, column - 1), game.world.getLayerData(layer, row - 1, column), game.world.getLayerData(layer, row - 1, column + 1)],
+            [game.world.getLayerData(layer, row, column - 1), game.world.getLayerData(layer, row, column), game.world.getLayerData(layer, row, column + 1)],
+            [game.world.getLayerData(layer, row + 1, column - 1), game.world.getLayerData(layer, row + 1, column), game.world.getLayerData(layer, row + 1, column + 1)]
         ]
 
         /**

@@ -32,7 +32,7 @@ Behaviour.set("player_interact", function(delay, object, game)
     }
 
     var e = Input.getOnce(69);
-    if(e && game.world.getInteractionLayer(positionStart.y + positionFront.y, positionStart.x + positionFront.x) == 1)
+    if(e && game.world.getLayerInteraction(positionStart.y + positionFront.y, positionStart.x + positionFront.x) == 1)
     {
         console.log("INTERACTION !");
     }

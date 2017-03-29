@@ -3,11 +3,10 @@
  *
  * @param {type} units the size units of reference (in pixels).
  * @param {type} actors the actors.
- * @param {type} data the terrain data matrix.
- * @param {type} collision the terrain collision data matrix.
- * @param {type} interaction the terrain interaction data matrix.
+ * @param {type} interactions the triggerable interactions.
+ * @param {type} layers the terrain layers matrices.
  */
-function World(units, actors, data, collision, interaction)
+function World(units, actors, interactions, layers)
 {
     this.units = units;
 
@@ -20,39 +19,38 @@ function World(units, actors, data, collision, interaction)
         }
     }
 
-    this.data = data;
-    this.collision = collision;
-    this.interaction = interaction;
+    this.interactions = interactions;
+    this.layers = layers;
 }
 
-World.prototype.getDataLayer = function(layer, l, c)
+World.prototype.getLayerData = function(layer, row, column)
 {
     var res = 0;
-    if(layer >= 0 && layer < this.data.length && l >= 0 && l < this.data[layer].length && c >= 0 && c < this.data[layer][l].length)
+    if(layer >= 0 && layer < this.layers.data.length && row >= 0 && row < this.layers.data[layer].length && column >= 0 && column < this.layers.data[layer][row].length)
     {
-        res = this.data[layer][l][c];
+        res = this.layers.data[layer][row][column];
     }
 
     return res;
 }
 
-World.prototype.getCollisionLayer = function(l, c)
+World.prototype.getLayerCollision = function(row, column)
 {
     var res = 1;
-    if(l >= 0 && l < this.collision.length && c >= 0 && c < this.collision[l].length)
+    if(row >= 0 && row < this.layers.collision.length && column >= 0 && column < this.layers.collision[row].length)
     {
-        res = this.collision[l][c];
+        res = this.layers.collision[row][column];
     }
 
     return res;
 }
 
-World.prototype.getInteractionLayer = function(l, c)
+World.prototype.getLayerInteraction = function(row, column)
 {
     var res = 0;
-    if(l >= 0 && l < this.interaction.length && c >= 0 && c < this.interaction[l].length)
+    if(row >= 0 && row < this.layers.interaction.length && column >= 0 && column < this.layers.interaction[row].length)
     {
-        res = this.interaction[l][c];
+        res = this.layers.interaction[row][column];
     }
 
     return res;
