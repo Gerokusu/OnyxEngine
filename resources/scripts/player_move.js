@@ -93,7 +93,7 @@ Behaviour.set("player_move", function(delay, object, game)
         l = Math.ceil(object.position.y + object.translation.dy);
     }
 
-    if(game.world.collision[l][c] == 0)
+    if(game.world.getCollisionLayer(l, c) == 0)
     {
         //Calcul de la position de destination en fonction du temps et de la vitesse de déplacement
         object.position.x += (delay * object.translation.dx * object.translation.speed);
@@ -110,6 +110,7 @@ Behaviour.set("player_move", function(delay, object, game)
             object.position.x = Math.ceil(object.position.x);
             object.translation.dx = 0;
         }
+
         //Changement de case en axe y
         if(Math.floor(positionStart.y) < Math.floor(object.position.y))
         {

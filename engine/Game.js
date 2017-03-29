@@ -170,7 +170,7 @@ Game.prototype.setWorld = function(world)
 {
     if(world)
     {
-        this.world = new World(world.units, world.actors, world.data, world.collision);
+        this.world = new World(world.units, world.actors, world.data, world.collision, world.interaction);
     }
 }
 
