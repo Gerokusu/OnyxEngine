@@ -11,6 +11,7 @@ function Game()
         this.setTitle(content.title);
         this.setSize(parseInt(content.width), parseInt(content.height));
         this.setTextures(content.textures);
+        this.setGUI(content.gui);
         this.setAnimations(content.animations);
         this.setBehaviours(content.behaviours);
         this.setTerrains(content.terrains);
@@ -19,6 +20,7 @@ function Game()
 
         this.input = new Input();
         this.behaviour = new Behaviour();
+        this.camera = [];
 
         var context = this.canvas.getContext("2d");
         if(context)
@@ -89,6 +91,20 @@ Game.prototype.setTextures = function(textures)
         {
             this.textures[path] = new Texture("resources/textures/" + path);
         }
+    }
+}
+
+/**
+ * Game.prototype.setGUI - Sets the game gui textures to load.
+ *
+ * @param  {Array} gui  the array of GUI elements.
+ */
+Game.prototype.setGUI = function(gui)
+{
+    this.gui = [];
+    for(var element of gui)
+    {
+        this.gui[element.id] = new GUI(element.id, element.texture, element.background, element.top, element.right, element.bottom, element.left, element.topleft, element.topright, element.bottomleft, element.bottomright);
     }
 }
 
@@ -175,6 +191,39 @@ Game.prototype.setWorld = function(world)
 }
 
 /**
+ * Game.prototype.addGUI - Adds a GUI element to the given location on the screen.
+ *
+ * @param  {type} id the GUI element id.
+ * @param  {type} id_add the GUI added element id.
+ * @param  {type} x  the x location coordinate.
+ * @param  {type} y  the y location coordinate.
+ */
+Game.prototype.addGUIElement = function(id, id_add, x, y)
+{
+    for(var key in this.gui)
+    {
+        var element = this.gui[key];
+        if(element && element.id == id)
+        {
+            this.camera[id_add] =
+            {
+                texture: element.texture,
+                x: x,
+                y: y
+            };
+        }
+    }
+}
+
+Game.prototype.removeGUIElement = function(id_add)
+{
+    if(this.camera[id_add])
+    {
+        delete this.camera[id_add];
+    }
+}
+
+/**
  * Game.prototype.load - Loads the game data contained in the game.json file.
  *
  * @param  {Function} callback the callback function.
@@ -250,6 +299,23 @@ Game.prototype.drawActors = function(context, layer)
 }
 
 /**
+ * Game.prototype.drawGUI - Draws the GUI.
+ *
+ * @param  {type} context the canvas context.
+ */
+Game.prototype.drawGUI = function(context)
+{
+    for(var key in this.camera)
+    {
+        var element = this.camera[key];
+        if(element)
+        {
+            context.drawImage(element.texture.image, element.x, element.y);
+        }
+    }
+}
+
+/**
  * Game.prototype.onThreadUpdate - Called every thread cycle. Behaviours and scripting stuff goes here.
  *
  * @param {Context2D} delay the delay since the last cycle.
@@ -283,4 +349,7 @@ Game.prototype.onThreadRender = function(context)
     context.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
     this.drawWorld(context);
+    this.drawGUI(context);
+
+    this.camera = [];
 }

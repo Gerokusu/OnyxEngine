@@ -2,7 +2,7 @@
     "title": "Pokémon Onyx",
     "width": 960,
     "height": 640,
-    "fps": 120,
+    "fps": 60,
     "textures":
     [
         "terrains.png",
@@ -146,6 +146,74 @@
     [
         "player_move.js",
         "player_interact.js"
+    ],
+    "gui":
+    [
+        {
+            "id": "textbox_large",
+            "texture": "textbox_large.png"
+        },
+        {
+            "id": "textbox",
+            "texture": "textbox.png",
+            "background":
+            {
+                "x": 11,
+                "y": 7
+            },
+            "top":
+            {
+                "x": 11,
+                "y": 0,
+                "h": 7
+            },
+            "right":
+            {
+                "x": 12,
+                "y": 7,
+                "w": 22
+            },
+            "bottom":
+            {
+                "x": 11,
+                "y": 9,
+                "h": 7
+            },
+            "left":
+            {
+                "x": 0,
+                "y": 7,
+                "w": 11
+            },
+            "topleft":
+            {
+                "x": 0,
+                "y": 0,
+                "w": 11,
+                "h": 7
+            },
+            "topright":
+            {
+                "x": 12,
+                "y": 0,
+                "w": 22,
+                "h": 7
+            },
+            "bottomleft":
+            {
+                "x": 0,
+                "y": 8,
+                "w": 11,
+                "h": 8
+            },
+            "bottomright":
+            {
+                "x": 12,
+                "y": 8,
+                "w": 22,
+                "h": 8
+            }
+        }
     ],
     "terrains":
     [

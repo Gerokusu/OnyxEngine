@@ -34,14 +34,34 @@ Behaviour.set("player_interact", function(delay, object, game)
     var e = Input.getOnce(69);
     if(e)
     {
-        var id = game.world.getLayerInteraction(positionStart.y + positionFront.y, positionStart.x + positionFront.x);
-        if(id)
+
+        if(object.interaction)
         {
-            var interaction = game.world.getInteraction(id);
-            if(interaction)
+            game.removeGUIElement(object.interaction.id);
+            object.interaction = undefined;
+        }
+        else
+        {
+            var id = game.world.getLayerInteraction(positionStart.y + positionFront.y, positionStart.x + positionFront.x);
+            if(id)
             {
-                
+                var interaction = game.world.getInteraction(id);
+                if(interaction)
+                {
+                    object.interaction = interaction;
+                }
             }
+        }
+    }
+
+    if(object.interaction)
+    {
+        switch(object.interaction.type)
+        {
+            case "text":
+                game.addGUIElement("textbox_large", object.interaction.id, 0, 440);
+                game.addGUIText(object.interaction.id + "_text", 0, 440);
+            break;
         }
     }
 });
