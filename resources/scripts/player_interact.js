@@ -40,7 +40,7 @@ Behaviour.set("player_interact", function(delay, object, game)
             var interaction = game.world.getInteraction(id);
             if(interaction)
             {
-                
+                console.log(interaction.value);
             }
         }
     }
