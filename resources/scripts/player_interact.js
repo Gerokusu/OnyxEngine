@@ -8,8 +8,8 @@ Behaviour.set("player_interact", function(delay, object, game)
 
     var positionFront =
     {
-        x: 0,
-        y: 0
+        x: positionStart.x,
+        y: positionStart.y
     }
 
     switch(object.orientation)
@@ -31,16 +31,44 @@ Behaviour.set("player_interact", function(delay, object, game)
         break;
     }
 
+    var state = object.interaction;
+    if(state == undefined)
+    {
+        object.interaction = 0;
+    }
+
     var e = Input.getOnce(69);
     if(e)
     {
-        var id = game.world.getLayerInteraction(positionStart.y + positionFront.y, positionStart.x + positionFront.x);
+        var id = game.world.getLayerInteraction(positionFront.y, positionFront.x);
         if(id)
         {
-            var interaction = game.world.getInteraction(id);
+            var interaction = game.world.getInteraction(id, "e");
             if(interaction)
             {
-                console.log(interaction.value);
+                var height = 0;
+                if(object.interaction < interaction.value.length)
+                {
+                    var positionOnScreen =
+                    {
+                        x: Math.floor(game.world.units.width * positionFront.x + 16),
+                        y: Math.floor(game.world.units.height * positionFront.y - 16),
+                        align: "center"
+                    };
+
+                    game.guiLayout.clearHeight(height);
+                    game.guiLayout.add(height, "dialog", positionOnScreen, interaction.value[object.interaction]);
+
+                    object.interaction++;
+                    object.translation.slowed = 1;
+                }
+                else
+                {
+                    game.guiLayout.clearHeight(height);
+
+                    object.interaction = 0;
+                    object.translation.slowed = 0;
+                }
             }
         }
     }

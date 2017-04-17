@@ -21,7 +21,8 @@ function Actor(name, layer, x, y, orientation, animator, behaviours)
     {
         dx: 0,
         dy: 0,
-        speed: 0
+        speed: 0,
+        slowed: 0
     };
     this.orientation = orientation;
     this.animator =

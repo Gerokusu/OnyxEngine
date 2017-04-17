@@ -9,7 +9,34 @@
         "characters.png",
         "trees.png",
         "houses.png",
-        "pokemons.png"
+        "pokemons.png",
+        "gui/dialog.png"
+    ],
+    "fonts":
+    [
+        {
+            "name": "pokemon_hgss",
+            "src": "resources/fonts/pokemon_hgss.ttf"
+        }
+    ],
+    "gui":
+    [
+        {
+            "id": "dialog",
+            "texture": "gui/dialog.png",
+            "textarea":
+            {
+                "top": 14,
+                "right": 227,
+                "bottom": 74,
+                "left": 12,
+                "font":
+                {
+                    "size": 24,
+                    "family": "pokemon_hgss"
+                }
+            }
+        }
     ],
     "animations":
     [
@@ -145,7 +172,8 @@
     "behaviours":
     [
         "player_move.js",
-        "player_interact.js"
+        "player_interact.js",
+        "player_inventory.js"
     ],
     "terrains":
     [
@@ -241,7 +269,8 @@
                 "behaviours":
                 [
                     "player_move",
-                    "player_interact"
+                    "player_interact",
+                    "player_inventory"
                 ]
             }
         ],
@@ -249,8 +278,24 @@
         [
             {
                 "id": 1,
+                "key": "i",
+                "type": "inventory",
+                "value":
+                [
+                    "Sauvegarder",
+                    "Quitter"
+                ]
+            },
+            {
+                "id": 2,
+                "key": "e",
                 "type": "text",
-                "value": "This is a door."
+                "value":
+                [
+                    "This is a door.",
+                    "And you can't open it.",
+                    "How sad ;("
+                ]
             }
         ],
         "layers":
@@ -392,7 +437,7 @@
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],

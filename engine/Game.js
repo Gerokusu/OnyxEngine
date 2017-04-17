@@ -11,6 +11,8 @@ function Game()
         this.setTitle(content.title);
         this.setSize(parseInt(content.width), parseInt(content.height));
         this.setTextures(content.textures);
+        this.setFonts(content.fonts);
+        this.setGUI(content.gui);
         this.setAnimations(content.animations);
         this.setBehaviours(content.behaviours);
         this.setTerrains(content.terrains);
@@ -89,6 +91,36 @@ Game.prototype.setTextures = function(textures)
         {
             this.textures[path] = new Texture("resources/textures/" + path);
         }
+    }
+}
+
+/**
+ * Game.prototype.setTextures - Sets the game fonts to load.
+ *
+ * @param  {type} fonts the array of font faces.
+ */
+Game.prototype.setFonts = function(fonts)
+{
+   if(fonts)
+   {
+       this.fonts = [];
+       for(var font of fonts)
+       {
+           this.fonts[font.name] = new Font(font.name, font.src);
+       }
+   }
+}
+
+/**
+ * Game.prototype.setGUI - Sets the game GUI to load.
+ *
+ * @param  {type} guiElements the array of GUI elements
+ */
+Game.prototype.setGUI = function(guiElements)
+{
+    if(guiElements)
+    {
+        this.guiLayout = new GUILayout(guiElements);
     }
 }
 
@@ -250,6 +282,46 @@ Game.prototype.drawActors = function(context, layer)
 }
 
 /**
+ * Game.prototype.drawGUI - Draw the current active GUI elements.
+ *
+ * @param  {type} context the canvas context.
+ */
+Game.prototype.drawGUI = function(context)
+{
+    for(var height of this.guiLayout.heights)
+    {
+        for(var guiElement of height)
+        {
+            var texture = this.textures[guiElement.element.texture];
+            if(texture)
+            {
+                var position =
+                {
+                    x: guiElement.x,
+                    y: guiElement.y
+                };
+
+                switch(guiElement.align)
+                {
+                    case "center":
+                        position.x -= texture.image.width / 2;
+                        position.y -= texture.image.height / 2;
+                    break;
+                }
+
+                context.drawImage(texture.image, 0, 0, texture.image.width, texture.image.height, position.x, position.y, texture.image.width, texture.image.height);
+                if(guiElement.text)
+                {
+                    context.font = guiElement.element.textarea.font.size + "px " + guiElement.element.textarea.font.family;
+
+                    context.fillText(guiElement.text, position.x + guiElement.element.textarea.left, position.y + guiElement.element.textarea.top +  guiElement.element.textarea.font.size / 2);
+                }
+            }
+        }
+    }
+}
+
+/**
  * Game.prototype.onThreadUpdate - Called every thread cycle. Behaviours and scripting stuff goes here.
  *
  * @param {Context2D} delay the delay since the last cycle.
@@ -283,4 +355,5 @@ Game.prototype.onThreadRender = function(context)
     context.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
     this.drawWorld(context);
+    this.drawGUI(context);
 }
