@@ -26,10 +26,10 @@
             "texture": "gui/dialog.png",
             "textarea":
             {
-                "top": 14,
-                "right": 227,
-                "bottom": 74,
-                "left": 12,
+                "top": 19,
+                "right": 41,
+                "bottom": 28,
+                "left": 18,
                 "font":
                 {
                     "size": 24,
@@ -292,8 +292,8 @@
                 "type": "text",
                 "value":
                 [
-                    "This is a door.",
-                    "And you can't open it.",
+                    "This is a door. A very beautiful, wooden closed door. How nice.",
+                    "But the problem is : you can't open it.",
                     "How sad ;("
                 ]
             }

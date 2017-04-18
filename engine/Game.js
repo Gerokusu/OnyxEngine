@@ -305,19 +305,70 @@ Game.prototype.drawGUI = function(context)
                 {
                     case "center":
                         position.x -= texture.image.width / 2;
-                        position.y -= texture.image.height / 2;
+                        position.y -= (texture.image.height / 2) + (this.world.units.width / 2);
                     break;
                 }
 
                 context.drawImage(texture.image, 0, 0, texture.image.width, texture.image.height, position.x, position.y, texture.image.width, texture.image.height);
                 if(guiElement.text)
                 {
-                    context.font = guiElement.element.textarea.font.size + "px " + guiElement.element.textarea.font.family;
+                    var rectangle =
+                    {
+                        top: position.y + guiElement.element.textarea.top + guiElement.element.textarea.font.size / 2,
+                        right: position.x + texture.image.width - guiElement.element.textarea.right,
+                        bottom: position.y + texture.image.height - guiElement.element.textarea.bottom,
+                        left: position.x + guiElement.element.textarea.left
+                    }
 
-                    context.fillText(guiElement.text, position.x + guiElement.element.textarea.left, position.y + guiElement.element.textarea.top +  guiElement.element.textarea.font.size / 2);
+                    this.drawText(context, guiElement.text, rectangle, guiElement.element.textarea.font.size, guiElement.element.textarea.font.family);
                 }
             }
         }
+    }
+}
+
+/**
+ * Game.prototype.drawText - Draws a text in the given rectangle.
+ *
+ * @param  {type} context the canvas context.
+ * @param  {type} text the text to be displayed.
+ * @param  {rectangle} rectangle the bounding rectangle.
+ */
+Game.prototype.drawText = function(context, text, rectangle, size, family)
+{
+    context.font = size + "px '" + family + "'";
+
+    var width = rectangle.right - rectangle.left;
+    var height = rectangle.bottom - rectangle.top;
+
+    var position =
+    {
+        x: 0,
+        y: 0
+    };
+
+    for(var word of text.split(" "))
+    {
+        word += " ";
+
+        var div = document.createElement("div");
+        div.setAttribute("style", "display: inline-block; white-space: pre; font: " + context.font + ";");
+        div.textContent = word + " ";
+        document.body.append(div);
+
+        if(position.x + div.clientWidth > width)
+        {
+            position.x = 0;
+            position.y += div.clientHeight;
+        }
+
+        if(position.y <= height)
+        {
+            context.fillText(word + " ", position.x + rectangle.left, position.y + rectangle.top);
+            position.x += div.clientWidth;
+        }
+
+        div.remove();
     }
 }
 
