@@ -249,7 +249,7 @@ Game.prototype.drawWorld = function(context)
                 {
                     var sprite = terrain.getVariant(this, layer, row, column);
                     var onScreen = this.world.camera.getPositionOnScreen(this.world.units.width * column, this.world.units.height * row);
-                    context.drawImage(terrain.texture.image, sprite.x, sprite.y, sprite.width, sprite.height, onScreen.x, onScreen.y, sprite.width, sprite.height);
+                    context.drawImage(terrain.texture.image, sprite.x, sprite.y, sprite.width, sprite.height, Math.floor(onScreen.x), Math.floor(onScreen.y), sprite.width, sprite.height);
                 }
             }
         }
