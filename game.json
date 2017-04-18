@@ -274,6 +274,15 @@
                 ]
             }
         ],
+        "camera":
+        {
+            "focus": 0,
+            "viewport":
+            {
+                "width": 960,
+                "height": 640
+            }
+        },
         "interactions":
         [
             {

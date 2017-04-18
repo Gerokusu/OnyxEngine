@@ -202,7 +202,7 @@ Game.prototype.setWorld = function(world)
 {
     if(world)
     {
-        this.world = new World(world.units, world.actors, world.interactions, world.layers);
+        this.world = new World(world.units, world.actors, world.camera, world.interactions, world.layers);
     }
 }
 
@@ -248,7 +248,8 @@ Game.prototype.drawWorld = function(context)
                 if(terrain && terrain.texture && terrain.texture.image)
                 {
                     var sprite = terrain.getVariant(this, layer, row, column);
-                    context.drawImage(terrain.texture.image, sprite.x, sprite.y, sprite.width, sprite.height, this.world.units.width * column, this.world.units.height * row, sprite.width, sprite.height);
+                    var onScreen = this.world.camera.getPositionOnScreen(this.world.units.width * column, this.world.units.height * row);
+                    context.drawImage(terrain.texture.image, sprite.x, sprite.y, sprite.width, sprite.height, onScreen.x, onScreen.y, sprite.width, sprite.height);
                 }
             }
         }
@@ -275,7 +276,8 @@ Game.prototype.drawActors = function(context, layer)
             if(character)
             {
                 var sprite = character.getAnimation(this.animations[actor.animator.animation], actor.animator.state);
-                context.drawImage(character.texture.image, sprite.x, sprite.y, sprite.width, sprite.height, Math.floor(this.world.units.width * actor.position.x - 16), Math.floor(this.world.units.height * actor.position.y - 16), sprite.width, sprite.height);
+                var onScreen = this.world.camera.getPositionOnScreen(this.world.units.width * actor.position.x - 16, this.world.units.height *  actor.position.y - 16);
+                context.drawImage(character.texture.image, sprite.x, sprite.y, sprite.width, sprite.height, Math.floor(onScreen.x), Math.floor(onScreen.y), sprite.width, sprite.height);
             }
         }
     }
@@ -295,29 +297,25 @@ Game.prototype.drawGUI = function(context)
             var texture = this.textures[guiElement.element.texture];
             if(texture)
             {
-                var position =
-                {
-                    x: guiElement.x,
-                    y: guiElement.y
-                };
+                var onScreen = this.world.camera.getPositionOnScreen(guiElement.x, guiElement.y);
 
                 switch(guiElement.align)
                 {
                     case "center":
-                        position.x -= texture.image.width / 2;
-                        position.y -= (texture.image.height / 2) + (this.world.units.width / 2);
+                        onScreen.x -= texture.image.width / 2;
+                        onScreen.y -= (texture.image.height / 2) + (this.world.units.width / 2);
                     break;
                 }
 
-                context.drawImage(texture.image, 0, 0, texture.image.width, texture.image.height, position.x, position.y, texture.image.width, texture.image.height);
+                context.drawImage(texture.image, 0, 0, texture.image.width, texture.image.height, onScreen.x, onScreen.y, texture.image.width, texture.image.height);
                 if(guiElement.text)
                 {
                     var rectangle =
                     {
-                        top: position.y + guiElement.element.textarea.top + guiElement.element.textarea.font.size / 2,
-                        right: position.x + texture.image.width - guiElement.element.textarea.right,
-                        bottom: position.y + texture.image.height - guiElement.element.textarea.bottom,
-                        left: position.x + guiElement.element.textarea.left
+                        top: onScreen.y + guiElement.element.textarea.top + guiElement.element.textarea.font.size / 2,
+                        right: onScreen.x + texture.image.width - guiElement.element.textarea.right,
+                        bottom: onScreen.y + texture.image.height - guiElement.element.textarea.bottom,
+                        left: onScreen.x + guiElement.element.textarea.left
                     }
 
                     this.drawText(context, guiElement.text, rectangle, guiElement.element.textarea.font.size, guiElement.element.textarea.font.family);

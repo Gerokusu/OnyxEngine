@@ -5,7 +5,7 @@ Behaviour.set("player_move", function(delay, object, game)
         x: object.position.x,
         y: object.position.y
     }
-
+    
     if(object.translation.slowed != 1)
     {
         var up = Input.get(90);
