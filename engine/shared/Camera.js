@@ -25,8 +25,8 @@ Camera.prototype.getPositionOnScreen = function(x, y)
 {
     var position =
     {
-        x: (this.viewport.width / 2) - (this.viewport.units.width * this.focus.position.x - x),
-        y: (this.viewport.height / 2) - (this.viewport.units.height * this.focus.position.y - y)
+        x: (this.viewport.width / 2) - (this.viewport.units.width / 2) - (this.viewport.units.width * this.focus.position.x - x),
+        y: (this.viewport.height / 2) - (this.viewport.units.height / 2) - (this.viewport.units.height * this.focus.position.y - y)
     };
 
     return position;
