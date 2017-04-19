@@ -297,13 +297,25 @@ Game.prototype.drawGUI = function(context)
             var texture = this.textures[guiElement.element.texture];
             if(texture)
             {
-                var onScreen = this.world.camera.getPositionOnScreen(guiElement.x, guiElement.y);
+                var onScreen;
+                if(guiElement.fixed)
+                {
+                    onScreen =
+                    {
+                        x: guiElement.x,
+                        y: guiElement.y
+                    };
+                }
+                else
+                {
+                    onScreen = this.world.camera.getPositionOnScreen(guiElement.x, guiElement.y);
+                }
 
                 switch(guiElement.align)
                 {
                     case "center":
                         onScreen.x -= texture.image.width / 2;
-                        onScreen.y -= (texture.image.height / 2) + (this.world.units.width / 2);
+                        onScreen.y -= (texture.image.height / 2);
                     break;
                 }
 

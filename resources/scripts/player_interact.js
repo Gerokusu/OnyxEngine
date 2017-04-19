@@ -51,9 +51,10 @@ Behaviour.set("player_interact", function(delay, object, game)
                 {
                     var positionOnScreen =
                     {
-                        x: Math.floor(game.world.units.width * positionFront.x + 16),
-                        y: Math.floor(game.world.units.height * positionFront.y - 16),
-                        align: "center"
+                        x: Math.floor(game.world.units.width * positionFront.x + game.world.units.width / 2),
+                        y: Math.floor(game.world.units.height * positionFront.y - game.world.units.height / 2),
+                        align: "center",
+                        fixed: false
                     };
 
                     game.guiLayout.clearHeight(height);

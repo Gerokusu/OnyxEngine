@@ -51,13 +51,17 @@ GUILayout.prototype.add = function(height, index, position, text)
             element: guiElement,
             x: position.x,
             y: position.y,
-            align: position.align,
+            align: position.align ? position.align : "default",
+            fixed: position.fixed ? position.fixed : false,
             text: text
         };
 
-        if(!this.heights[height])
+        for(var i = 0; i <= height; i++)
         {
-            this.heights[height] = [];
+            if(!this.heights[i])
+            {
+                this.heights[i] = [];
+            }
         }
 
         this.heights[height].push(onScreen);

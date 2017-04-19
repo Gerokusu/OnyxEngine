@@ -10,7 +10,8 @@
         "trees.png",
         "houses.png",
         "pokemons.png",
-        "gui/dialog.png"
+        "gui/dialog.png",
+        "gui/inventory.png"
     ],
     "fonts":
     [
@@ -24,6 +25,22 @@
         {
             "id": "dialog",
             "texture": "gui/dialog.png",
+            "textarea":
+            {
+                "top": 18,
+                "right": 41,
+                "bottom": 28,
+                "left": 18,
+                "font":
+                {
+                    "size": 24,
+                    "family": "pokemon_hgss"
+                }
+            }
+        },
+        {
+            "id": "inventory",
+            "texture": "gui/inventory.png",
             "textarea":
             {
                 "top": 19,
