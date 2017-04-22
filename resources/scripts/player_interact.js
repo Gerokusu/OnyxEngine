@@ -41,35 +41,48 @@ Behaviour.set("player_interact", function(delay, object, game)
     if(e)
     {
         var id = game.world.getLayerInteraction(positionFront.y, positionFront.x);
-        if(id)
+        if(id != undefined)
         {
+            var height = 0;
             var interaction = game.world.getInteraction(id, "e");
-            if(interaction)
+            if(interaction != undefined && object.interaction != undefined && object.interaction < interaction.value.length)
             {
-                var height = 0;
-                if(object.interaction < interaction.value.length)
+                var text = "";
+                switch(interaction.type)
                 {
-                    var positionOnScreen =
-                    {
-                        x: Math.floor(game.world.units.width * positionFront.x + game.world.units.width / 2),
-                        y: Math.floor(game.world.units.height * positionFront.y - game.world.units.height / 2),
-                        align: "center",
-                        fixed: false
-                    };
+                    case "text":
+                        text = interaction.value[object.interaction];
+                    break;
 
-                    game.guiLayout.clearHeight(height);
-                    game.guiLayout.add(height, "dialog", positionOnScreen, interaction.value[object.interaction]);
+                    case "money_add":
+                        var amount = interaction.value[0];
+                        text = "You have won " + amount + "$ !";
+                        object.budget += amount;
 
-                    object.interaction++;
-                    object.translation.slowed = 1;
+                        game.world.setLayerInteraction(positionFront.y, positionFront.x, 0);
+                    break;
                 }
-                else
+
+                var positionOnScreen =
                 {
-                    game.guiLayout.clearHeight(height);
+                    x: Math.floor(game.world.units.width * positionFront.x + game.world.units.width / 2),
+                    y: Math.floor(game.world.units.height * positionFront.y - game.world.units.height / 2),
+                    align: "center",
+                    fixed: false
+                };
 
-                    object.interaction = 0;
-                    object.translation.slowed = 0;
-                }
+                game.guiLayout.clearHeight(height);
+                game.guiLayout.add(height, "dialog", positionOnScreen, text);
+
+                object.interaction++;
+                object.translation.slowed = 1;
+            }
+            else
+            {
+                game.guiLayout.clearHeight(height);
+
+                object.interaction = 0;
+                object.translation.slowed = 0;
             }
         }
     }

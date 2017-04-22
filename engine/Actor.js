@@ -25,6 +25,10 @@ function Actor(name, layer, x, y, orientation, animator, behaviours)
         slowed: 0
     };
     this.orientation = orientation;
+
+    this.budget = 0;
+    this.inventory = [];
+
     this.animator =
     {
         animation: animator.animation,

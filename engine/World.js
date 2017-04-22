@@ -76,3 +76,12 @@ World.prototype.getLayerInteraction = function(row, column)
 
     return res;
 }
+
+World.prototype.setLayerInteraction = function(row, column, value)
+{
+    var res = 0;
+    if(row >= 0 && row < this.layers.interaction.length && column >= 0 && column < this.layers.interaction[row].length)
+    {
+        res = this.layers.interaction[row][column] = value;
+    }
+}
