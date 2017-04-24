@@ -63,11 +63,19 @@ Behaviour.set("player_interact", function(delay, object, game)
                     break;
 
                     case "item_add":
-                        var item = game.items[interaction.value[0]];
+                        var index = interaction.value[0];
+                        var item = game.items[index];
                         if(item)
                         {
                             text = "You have received " + item.name + " !";
-                            object.inventory.push(item);
+                            if(object.inventory[index])
+                            {
+                                object.inventory[index]++;
+                            }
+                            else
+                            {
+                                object.inventory[index] = 1;
+                            }
                         }
 
                         game.world.setLayerInteraction(positionFront.y, positionFront.x, 0);

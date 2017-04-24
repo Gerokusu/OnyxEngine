@@ -312,23 +312,23 @@ Game.prototype.drawGUI = function(context)
     {
         for(var guiElement of height)
         {
+            var onScreen;
+            if(guiElement.fixed)
+            {
+                onScreen =
+                {
+                    x: guiElement.x,
+                    y: guiElement.y
+                };
+            }
+            else
+            {
+                onScreen = this.world.camera.getPositionOnScreen(guiElement.x, guiElement.y);
+            }
+
             var texture = this.textures[guiElement.element.texture];
             if(texture)
             {
-                var onScreen;
-                if(guiElement.fixed)
-                {
-                    onScreen =
-                    {
-                        x: guiElement.x,
-                        y: guiElement.y
-                    };
-                }
-                else
-                {
-                    onScreen = this.world.camera.getPositionOnScreen(guiElement.x, guiElement.y);
-                }
-
                 switch(guiElement.align)
                 {
                     case "center":
@@ -351,6 +351,18 @@ Game.prototype.drawGUI = function(context)
                     this.drawText(context, guiElement.text, rectangle, guiElement.element.textarea.font.size, guiElement.element.textarea.font.family);
                 }
             }
+            else
+            {
+                var rectangle =
+                {
+                    top: onScreen.y + guiElement.element.textarea.top + guiElement.element.textarea.font.size / 2,
+                    right: guiElement.element.textarea.right,
+                    bottom: guiElement.element.textarea.bottom,
+                    left: onScreen.x + guiElement.element.textarea.left
+                }
+
+                this.drawText(context, guiElement.text, rectangle, guiElement.element.textarea.font.size, guiElement.element.textarea.font.family);
+            }
         }
     }
 }
@@ -366,8 +378,8 @@ Game.prototype.drawText = function(context, text, rectangle, size, family)
 {
     context.font = size + "px '" + family + "'";
 
-    var width = rectangle.right - rectangle.left;
-    var height = rectangle.bottom - rectangle.top;
+    var width = rectangle.right >= 0 ? rectangle.right - rectangle.left : -1;
+    var height = rectangle.bottom >= 0 ? rectangle.bottom - rectangle.top : -1;
 
     var position =
     {
@@ -384,13 +396,13 @@ Game.prototype.drawText = function(context, text, rectangle, size, family)
         div.textContent = word + " ";
         document.body.append(div);
 
-        if(position.x + div.clientWidth > width)
+        if(position.x + div.clientWidth > width || width < 0)
         {
             position.x = 0;
             position.y += div.clientHeight;
         }
 
-        if(position.y <= height)
+        if(position.y <= height || height < 0)
         {
             context.fillText(word + " ", position.x + rectangle.left, position.y + rectangle.top);
             position.x += div.clientWidth;
