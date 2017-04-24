@@ -32,18 +32,6 @@ Behaviour.set("player_inventory", function(delay, object, game)
 
         game.guiLayout.clearHeight(height + 1);
 
-        if(Object.keys(object.inventory).length > 1)
-        {
-            var positionOnScreenCursor =
-            {
-                x: positionOnScreen.x + 222,
-                y: positionOnScreen.y + 55 + object.inventoryCursor * heightItem,
-                fixed: true
-            };
-
-            game.guiLayout.add(height + 1, "inventory_selector", positionOnScreenCursor, "");
-        }
-
         if(e && !object.interaction)
         {
             for(var interaction of game.world.interactions)
@@ -91,6 +79,21 @@ Behaviour.set("player_inventory", function(delay, object, game)
                         object.translation.slowed = 0;
                     }
                 }
+            }
+        }
+
+        if(object.isInInventory)
+        {
+            if(Object.keys(object.inventory).length > 1)
+            {
+                var positionOnScreenCursor =
+                {
+                    x: positionOnScreen.x + 222,
+                    y: positionOnScreen.y + 55 + object.inventoryCursor * heightItem,
+                    fixed: true
+                };
+
+                game.guiLayout.add(height + 1, "inventory_selector", positionOnScreenCursor, "");
             }
         }
     }
