@@ -61,6 +61,17 @@ Behaviour.set("player_interact", function(delay, object, game)
 
                         game.world.setLayerInteraction(positionFront.y, positionFront.x, 0);
                     break;
+
+                    case "item_add":
+                        var item = game.items[interaction.value[0]];
+                        if(item)
+                        {
+                            text = "You have received " + item.name + " !";
+                            object.inventory.push(item);
+                        }
+
+                        game.world.setLayerInteraction(positionFront.y, positionFront.x, 0);
+                    break;
                 }
 
                 var positionOnScreen =

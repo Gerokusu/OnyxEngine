@@ -19,8 +19,16 @@ Behaviour.set("player_inventory", function(delay, object, game)
                             fixed: true
                         };
 
+                        var money = "000000" + object.budget;
+                        var padding = " ".repeat(8);
+
                         game.guiLayout.clearHeight(height);
-                        game.guiLayout.add(height, "inventory", positionOnScreen, "Inventory");
+                        game.guiLayout.add(height, "inventory", positionOnScreen, "Inventory" + padding + money.substr(money.length - 6) + "$");
+
+                        for(var item of object.inventory)
+                        {
+                            console.log(item.name);
+                        }
 
                         object.isInInventory = true;
                         object.translation.slowed = 1;

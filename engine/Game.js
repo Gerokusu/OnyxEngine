@@ -17,6 +17,7 @@ function Game()
         this.setBehaviours(content.behaviours);
         this.setTerrains(content.terrains);
         this.setCharacters(content.characters);
+        this.setItems(content.items);
         this.setWorld(content.world);
 
         this.input = new Input();
@@ -194,6 +195,23 @@ Game.prototype.setCharacters = function(characters)
 }
 
 /**
+ * Game.prototype.setItems - Sets the game items to load.
+ *
+ * @param  {type} items the array of items.
+ */
+Game.prototype.setItems = function(items)
+{
+    if(items)
+    {
+        this.items = [];
+        for(var item of items)
+        {
+            this.items[item.id] = new Item(item.name, this.textures[item.texture], item.row, item.column, item.width, item.height);
+        }
+    }
+}
+
+/**
  * Game.prototype.setWorld - Sets the game world to load. Also loads contained scripts.
  *
  * @param  {Array} world  the world. ZA WARUDO !
@@ -276,7 +294,7 @@ Game.prototype.drawActors = function(context, layer)
             if(character)
             {
                 var sprite = character.getAnimation(this.animations[actor.animator.animation], actor.animator.state);
-                var onScreen = this.world.camera.getPositionOnScreen(this.world.units.width * actor.position.x - 16, this.world.units.height *  actor.position.y - 16);
+                var onScreen = this.world.camera.getPositionOnScreen(this.world.units.width * actor.position.x - 16, this.world.units.height *  actor.position.y);
                 context.drawImage(character.texture.image, sprite.x, sprite.y, sprite.width, sprite.height, Math.floor(onScreen.x), Math.floor(onScreen.y), sprite.width, sprite.height);
             }
         }
