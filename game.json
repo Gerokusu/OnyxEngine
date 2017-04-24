@@ -330,6 +330,34 @@
             "name": "Caps. P.E.S.Q.U.E.T."
         },
         {
+            "id": 1,
+            "name": "Clé secrète"
+        },
+        {
+            "id": 2,
+            "name": "Bouteille de whisky"
+        },
+        {
+            "id": 3,
+            "name": "Cocotte-minute"
+        },
+        {
+            "id": 4,
+            "name": "Lait Meumeu"
+        },
+        {
+            "id": 5,
+            "name": "Lettre confidentielle"
+        },
+        {
+            "id": 6,
+            "name": "Avion (en papier)"
+        },
+        {
+            "id": 7,
+            "name": "Classeur important"
+        },
+        {
             "id": 24,
             "name": "Caps. C.L.E.R.M.O.N.T."
         }
@@ -380,8 +408,7 @@
                 "type": "inventory",
                 "value":
                 [
-                    "Sauvegarder",
-                    "Quitter"
+                    
                 ]
             },
             {
