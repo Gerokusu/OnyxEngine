@@ -1,13 +1,16 @@
 Behaviour.set("player_inventory", function(delay, object, game)
 {
-    object.inventory[0] = 1;
-    object.inventory[1] = 1;
-    object.inventory[2] = 1;
-    object.inventory[3] = 1;
-    object.inventory[4] = 1;
-    object.inventory[5] = 1;
-    object.inventory[6] = 1;
-    object.inventory[7] = 1;
+    if(!object.inventory[0])
+    {
+        object.inventory[0] = 1;
+        object.inventory[1] = 1;
+        object.inventory[2] = 1;
+        object.inventory[3] = 1;
+        object.inventory[4] = 1;
+        object.inventory[5] = 1;
+        object.inventory[6] = 1;
+        object.inventory[7] = 1;
+    }
 
     object.inventoryCursor = (object.inventoryCursor != undefined) ? object.inventoryCursor : 0;
     object.inventoryCursorOffset = (object.inventoryCursorOffset != undefined) ? object.inventoryCursorOffset : 0;
