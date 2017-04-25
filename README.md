@@ -1,6 +1,6 @@
-# PokemonOnyx
+# OnyxEngine
 
-Un projet scolaire dont l'objectif est de développer un jeu-vidéo de type RPG, basé sur le monde de Pokémon. Une démonstration est disponible [ici](https://grox2006.github.io/PokemonOnyx/).
+Un projet scolaire dont l'objectif est de développer un moteur de RPG en Javascript avec HTML5. Une démonstration est disponible [ici](https://grox2006.github.io/OnyxEngine/).
 
 ## I. Documentation
 
